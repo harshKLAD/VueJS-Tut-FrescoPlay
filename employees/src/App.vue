@@ -47,7 +47,13 @@ export default {
       try {
         const response = await fetch('https://jsonplaceholder.typicode.com/users')
         const data = await response.json()
-        this.employees = data
+        //this.employees = data
+        //console.log(data)
+
+        const response2 = await fetch('http://localhost:3000/users2')
+        const data2 = await response2.json()
+        console.log(data2)
+        //this.employees = data
       } catch (error) {
         console.error(error)
       }
