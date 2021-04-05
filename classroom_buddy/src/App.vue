@@ -14,6 +14,7 @@
 
 <script>
 import Course from './components/Course.vue'
+
 export default {
   components: { Course },
   name: 'App',
@@ -71,6 +72,7 @@ body {
   margin: 10px 20px;
   border: #5A0A70 1px solid;
   border-radius: 7px 0px;
+  padding: 20px;
 }
 
 .course-main {

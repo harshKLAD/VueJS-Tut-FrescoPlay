@@ -22,14 +22,26 @@
                 <button class="action-button cancel" v-else-if="enrollmentStatus == 'Enrolled'" v-on:click="cancel()">
                     Cancel
                 </button>
-                <span v-else>Enrolled</span>
             </div>
         </div>
+        <hr>
+        <p class="feedback-bar">
+          <span title="Average Feedback">
+            Feedback: {{ avgFeedback }}
+          </span>
+          <span v-if="feedbackOpen" class="feedback-view" v-on:click="feedbackSection(false)">Hide Feedback</span>
+          <span v-else class="feedback-view" v-on:click="feedbackSection(true)">View Feedback</span> </p>
+          <div class="feedback-div" v-show="feedbackOpen">
+            <CourseTabs @get-avg-feedback="setAvgFeedback"/>
+          </div>
     </div>
 </template>
 
 <script>
+import CourseTabs from './CourseTabs.vue'
+
 export default {
+  components: { CourseTabs },
   name: 'Course',
   data () {
     return {
@@ -38,7 +50,10 @@ export default {
       description: 'A basic course to understand the concepts of Vue JS',
       enrollmentStatus: 'Fresh',
       prerequisites: ['HTML', 'CSS', 'JS'],
-      mouseOnCourse: false
+      mouseOnCourse: false,
+      reviews: [],
+      feedbackOpen: false,
+      avgFeedback: 'NA'
     }
   },
   methods: {
@@ -61,11 +76,28 @@ export default {
     },
     dehighlight_enroll () {
       this.mouseOnCourse = false
+    },
+    addMsg (courseReview) {
+      this.reviews.push(courseReview)
+    },
+    feedbackSection (shouldOpen) {
+      this.feedbackOpen = shouldOpen
     }
   },
   computed: {
     enrollmentStats () {
       return (this.currentEnrollments + '/' + this.limit)
+    },
+    setAvgFeedback () {
+      if (this.reviews.length === 0) {
+        return 'N/A'
+      }
+      let sum = 0
+
+      this.reviews.forEach(review => {
+        sum += review.rating
+      })
+      return (sum / this.reviews.length).toFixed(2) + '/5'
     }
   },
   props: {
